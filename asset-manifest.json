@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/FirebaseApp/static/css/main.04375f30.css",
+    "main.js": "/FirebaseApp/static/js/main.544ba65e.js",
+    "static/js/787.7f7dca02.chunk.js": "/FirebaseApp/static/js/787.7f7dca02.chunk.js",
+    "index.html": "/FirebaseApp/index.html",
+    "main.04375f30.css.map": "/FirebaseApp/static/css/main.04375f30.css.map",
+    "main.544ba65e.js.map": "/FirebaseApp/static/js/main.544ba65e.js.map",
+    "787.7f7dca02.chunk.js.map": "/FirebaseApp/static/js/787.7f7dca02.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.04375f30.css",
+    "static/js/main.544ba65e.js"
+  ]
+}
