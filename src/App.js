@@ -1,7 +1,7 @@
 import "./App.css";
 import Login from "./components/login.js";
 import { useState, useEffect } from "react";
-import { db } from "./config/firebase.js";
+import { db, auth } from "./config/firebase.js";
 import { getDocs, collection, addDoc, deleteDoc, doc,updateDoc } from "firebase/firestore";
 
 function App() {
@@ -50,6 +50,7 @@ function App() {
         name: newMovieName,
         releaseDate: newReleaseDate,
         receivedOscar: newMovieOscar,
+        userId:auth?.currentUser?.uid,
       });
       getMovieList();
     } catch (err) {
