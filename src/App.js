@@ -1,8 +1,9 @@
 import "./App.css";
 import Login from "./components/login.js";
 import { useState, useEffect } from "react";
-import { db, auth } from "./config/firebase.js";
+import { db, auth,storage } from "./config/firebase.js";
 import { getDocs, collection, addDoc, deleteDoc, doc,updateDoc } from "firebase/firestore";
+import {ref, uploadBytes} from "firebase/storage";
 
 function App() {
   const [movieList, setMovieList] = useState([]);
@@ -10,6 +11,7 @@ function App() {
   const [newMovieName, setNewMovieName] = useState("");
   const [newReleaseDate, setNewReleaseDate] = useState(0);
   const [newMovieOscar, setNewMovieOscar] = useState(false);
+  const [fileUpload, setFileUpload] = useState(null);
 
   const moviesCollectionRef = collection(db, "movies");
   const [updateName, setUpdateName] = useState({})
@@ -58,6 +60,18 @@ function App() {
     }
   };
 
+  const uploadFile= async ()=>{
+    if(!fileUpload) return;
+    const filesFolderRef = ref(storage, `projectFiles/${fileUpload.name}`);
+    try{
+      await uploadBytes(filesFolderRef, fileUpload);
+      console.log("File Uploaded");
+    }catch(e){
+      console.error(e);
+    }
+    
+  }
+
   return (
     <div className="App">
       <Login />
@@ -97,6 +111,12 @@ function App() {
             <button onClick={()=>updateMovie(movie.id)}>Update</button>
           </div>
         ))}
+      </div>
+      <div>
+        <input type="file" 
+        onChange={(e)=>setFileUpload(e.target.files[0])}
+        />
+        <button onClick={uploadFile}>Upload File</button>
       </div>
     </div>
   );
