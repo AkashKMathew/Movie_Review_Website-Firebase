@@ -5,7 +5,7 @@ import './login.css'
 function Login() {
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
-    console.log(auth?.currentUser?.email);
+    // console.log(auth?.currentUser?.email);
     const signIn = async (e) =>{
         e.preventDefault();
         try{

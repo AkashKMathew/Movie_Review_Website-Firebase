@@ -3,7 +3,7 @@ import Login from "./components/login.js";
 import { useState, useEffect } from "react";
 import { db, auth,storage } from "./config/firebase.js";
 import { getDocs, collection, addDoc, deleteDoc, doc,updateDoc } from "firebase/firestore";
-import {ref, uploadBytes} from "firebase/storage";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 
 function App() {
   const [movieList, setMovieList] = useState([]);
@@ -46,12 +46,18 @@ function App() {
   }
 
   const submitMovieData = async () => {
+    if(!fileUpload) return;
     console.log(newMovieName, newMovieOscar, newReleaseDate);
+    const filesFolderRef = ref(storage, `projectFiles/${fileUpload.name}`);
+
     try {
+      const snapshot = await uploadBytes(filesFolderRef, fileUpload);
+      const imgURL = await getDownloadURL(snapshot.ref);
       await addDoc(moviesCollectionRef, {
         name: newMovieName,
         releaseDate: newReleaseDate,
         receivedOscar: newMovieOscar,
+        imageURL:imgURL,
         userId:auth?.currentUser?.uid,
       });
       getMovieList();
@@ -59,45 +65,44 @@ function App() {
       console.error(err);
     }
   };
-
-  const uploadFile= async ()=>{
-    if(!fileUpload) return;
-    const filesFolderRef = ref(storage, `projectFiles/${fileUpload.name}`);
-    try{
-      await uploadBytes(filesFolderRef, fileUpload);
-      console.log("File Uploaded");
-    }catch(e){
-      console.error(e);
-    }
     
-  }
 
   return (
     <div className="App">
       <Login />
 
       <div>
+        <label>Movie Name:</label>
         <input
-          placeholder="Movie Name"
+          placeholder="Interstellar"
           onChange={(e) => setNewMovieName(e.target.value)}
+          required
         />
+        <label>Release year:</label>
         <input
           placeholder="Release Date"
           type="number"
           onChange={(e) => setNewReleaseDate(Number(e.target.value))}
+          required
         />
+        <label>Received Oscar
         <input
           type="checkbox"
           checked={newMovieOscar}
           onChange={(e) => setNewMovieOscar(e.target.checked)}
         />
-        <label>Received Oscar</label>
+        </label>
+        <input type="file" 
+        onChange={(e)=>setFileUpload(e.target.files[0])}
+        required
+        /><br/>
         <button onClick={submitMovieData}>Submit</button>
       </div>
 
       <div>
         {movieList.map((movie) => (
           <div>
+            <img src={movie.imageURL} alt="img"></img>
             <h1 style={{ color: movie.receivedOscar ? "green" : "red" }}>
               {movie.name}
             </h1>
@@ -108,15 +113,9 @@ function App() {
                 ...prevUpdateName,
                 [movie.id]:e.target.value,
                 }))}/>
-            <button onClick={()=>updateMovie(movie.id)}>Update</button>
+            <button onClick={()=>{updateMovie(movie.id);}}>Update</button>
           </div>
         ))}
-      </div>
-      <div>
-        <input type="file" 
-        onChange={(e)=>setFileUpload(e.target.files[0])}
-        />
-        <button onClick={uploadFile}>Upload File</button>
       </div>
     </div>
   );
