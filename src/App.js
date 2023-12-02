@@ -1,9 +1,16 @@
 import "./App.css";
 import Login from "./components/login.js";
 import { useState, useEffect } from "react";
-import { db, auth,storage } from "./config/firebase.js";
-import { getDocs, collection, addDoc, deleteDoc, doc,updateDoc } from "firebase/firestore";
-import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import { db, auth, storage } from "./config/firebase.js";
+import {
+  getDocs,
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
 
 function App() {
   const [movieList, setMovieList] = useState([]);
@@ -14,7 +21,7 @@ function App() {
   const [fileUpload, setFileUpload] = useState(null);
 
   const moviesCollectionRef = collection(db, "movies");
-  const [updateName, setUpdateName] = useState({})
+  const [updateName, setUpdateName] = useState({});
 
   const getMovieList = async () => {
     try {
@@ -34,19 +41,28 @@ function App() {
   }, []);
 
   const deleteMovie = async (id) => {
-    const movieDoc = doc(db, "movies", id)
-    await deleteDoc(movieDoc)
-    getMovieList()
-  }
-  const updateMovie = async (id) => {
-    const movieDoc = doc(db, "movies", id)
+    const movieDoc = doc(db, "movies", id);
+    await deleteDoc(movieDoc);
+    getMovieList();
+  };
+  const updateMovie = async (id, prevImgURL) => {
+    const movieDoc = doc(db, "movies", id);
     const updatedName = updateName[id] || "";
-    await updateDoc(movieDoc,{name:updatedName})
-    getMovieList()
-  }
+    const updateImg = 
+    await updateDoc(movieDoc, { name: updatedName });
+    if (fileUpload) {
+      const newMovieImg = ref(storage, `projectFiles/${fileUpload.name}`);
+      const snapshot =  await uploadBytes(newMovieImg, fileUpload);
+      const imgURL = await getDownloadURL(snapshot.ref);
+      await updateDoc(movieDoc,{imageURL:imgURL});
+      const oldImageRef = ref(storage, `projectFiles/${prevImgURL}`);
+    await deleteObject(oldImageRef);
+    }
+    getMovieList();
+  };
 
   const submitMovieData = async () => {
-    if(!fileUpload) return;
+    if (!fileUpload) return;
     console.log(newMovieName, newMovieOscar, newReleaseDate);
     const filesFolderRef = ref(storage, `projectFiles/${fileUpload.name}`);
 
@@ -57,15 +73,14 @@ function App() {
         name: newMovieName,
         releaseDate: newReleaseDate,
         receivedOscar: newMovieOscar,
-        imageURL:imgURL,
-        userId:auth?.currentUser?.uid,
+        imageURL: imgURL,
+        userId: auth?.currentUser?.uid,
       });
       getMovieList();
     } catch (err) {
       console.error(err);
     }
   };
-    
 
   return (
     <div className="App">
@@ -85,17 +100,20 @@ function App() {
           onChange={(e) => setNewReleaseDate(Number(e.target.value))}
           required
         />
-        <label>Received Oscar
-        <input
-          type="checkbox"
-          checked={newMovieOscar}
-          onChange={(e) => setNewMovieOscar(e.target.checked)}
-        />
+        <label>
+          Received Oscar
+          <input
+            type="checkbox"
+            checked={newMovieOscar}
+            onChange={(e) => setNewMovieOscar(e.target.checked)}
+          />
         </label>
-        <input type="file" 
-        onChange={(e)=>setFileUpload(e.target.files[0])}
-        required
-        /><br/>
+        <input
+          type="file"
+          onChange={(e) => setFileUpload(e.target.files[0])}
+          required
+        />
+        <br />
         <button onClick={submitMovieData}>Submit</button>
       </div>
 
@@ -107,13 +125,27 @@ function App() {
               {movie.name}
             </h1>
             <p>Date: {movie.releaseDate}</p>
-            <button onClick={()=>deleteMovie(movie.id)}>Delete Movie</button>
-            <input placeholder="New movie name" onChange={
-              (e)=>setUpdateName((prevUpdateName)=>({
-                ...prevUpdateName,
-                [movie.id]:e.target.value,
-                }))}/>
-            <button onClick={()=>{updateMovie(movie.id);}}>Update</button>
+            <button onClick={() => deleteMovie(movie.id)}>Delete Movie</button>
+            <input
+              placeholder="New movie name"
+              onChange={(e) =>
+                setUpdateName((prevUpdateName) => ({
+                  ...prevUpdateName,
+                  [movie.id]: e.target.value,
+                }))
+              }
+            />
+            <input
+              type="file"
+              onChange={(e) => setFileUpload(e.target.files[0])}
+            />
+            <br />
+            <button
+              onClick={() => {
+                updateMovie(movie.id, movie.imageURL);
+              }}>
+              Update
+            </button>
           </div>
         ))}
       </div>
