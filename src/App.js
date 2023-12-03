@@ -10,7 +10,14 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes, deleteObject } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  deleteObject,
+} from "firebase/storage";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [movieList, setMovieList] = useState([]);
@@ -40,30 +47,50 @@ function App() {
     getMovieList();
   }, []);
 
-  const deleteMovie = async (id) => {
+  const deleteMovie = async (id, prevImgURL) => {
     const movieDoc = doc(db, "movies", id);
-    await deleteDoc(movieDoc);
+    const fileName = decodeURIComponent(
+      new URL(prevImgURL).pathname.split("/").pop()
+    );
+    try {
+      await deleteDoc(movieDoc);
+      const oldImageRef = ref(storage, `${fileName}`);
+      await deleteObject(oldImageRef);
+      toast.success("Movie deleted!!!");
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to delete the movie!!!");
+    }
     getMovieList();
   };
+
   const updateMovie = async (id, prevImgURL) => {
     const movieDoc = doc(db, "movies", id);
     const updatedName = updateName[id] || "";
-    const updateImg = 
-    await updateDoc(movieDoc, { name: updatedName });
-    if (fileUpload) {
-      const newMovieImg = ref(storage, `projectFiles/${fileUpload.name}`);
-      const snapshot =  await uploadBytes(newMovieImg, fileUpload);
-      const imgURL = await getDownloadURL(snapshot.ref);
-      await updateDoc(movieDoc,{imageURL:imgURL});
-      const oldImageRef = ref(storage, `projectFiles/${prevImgURL}`);
-    await deleteObject(oldImageRef);
+    try {
+      await updateDoc(movieDoc, { name: updatedName });
+      if (fileUpload) {
+        const newMovieImg = ref(storage, `projectFiles/${fileUpload.name}`);
+        const snapshot = await uploadBytes(newMovieImg, fileUpload);
+        const imgURL = await getDownloadURL(snapshot.ref);
+        await updateDoc(movieDoc, { imageURL: imgURL });
+        const fileName = decodeURIComponent(
+          new URL(prevImgURL).pathname.split("/").pop()
+        );
+        const oldImageRef = ref(storage, `${fileName}`);
+        await deleteObject(oldImageRef);
+      }
+      toast.success("Movie details updated!!!");
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to update the movie details!!!");
     }
+    setFileUpload("");
     getMovieList();
   };
 
   const submitMovieData = async () => {
     if (!fileUpload) return;
-    console.log(newMovieName, newMovieOscar, newReleaseDate);
     const filesFolderRef = ref(storage, `projectFiles/${fileUpload.name}`);
 
     try {
@@ -76,14 +103,18 @@ function App() {
         imageURL: imgURL,
         userId: auth?.currentUser?.uid,
       });
-      getMovieList();
+      toast.success("New movie added!!!");
     } catch (err) {
       console.error(err);
+      toast.error("Failed to add the movie!!!");
     }
+    setFileUpload("");
+    getMovieList();
   };
 
   return (
     <div className="App">
+      <ToastContainer />
       <Login />
 
       <div>
@@ -125,7 +156,9 @@ function App() {
               {movie.name}
             </h1>
             <p>Date: {movie.releaseDate}</p>
-            <button onClick={() => deleteMovie(movie.id)}>Delete Movie</button>
+            <button onClick={() => deleteMovie(movie.id, movie.imageURL)}>
+              Delete Movie
+            </button>
             <input
               placeholder="New movie name"
               onChange={(e) =>
