@@ -1,8 +1,13 @@
 import { React,useState } from "react";
 import { auth, googleProvider} from "../config/firebase.js";
 import { createUserWithEmailAndPassword, signInWithPopup,signOut } from "firebase/auth";
-import './login.css'
+import './Login.css'
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+
 function Login() {
+    const navigate = useNavigate();
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     // console.log(auth?.currentUser?.email);
@@ -10,33 +15,41 @@ function Login() {
         e.preventDefault();
         try{
             await createUserWithEmailAndPassword(auth, email, password);
-            console.log("Logged in")
-            
+            toast.success("Signed in successfully!!!")
+            navigate('/reviews', { replace: true });
         }catch(err){
             console.error(err);
+            toast.error("Sign in failed!!!")
+
         }
     };
     const signInWithGoolge = async(e)=>{
         e.preventDefault();
         try{
             await signInWithPopup (auth, googleProvider);
-            console.log("Logged in")
+            toast.success("Signed in successfully!!!")
+            navigate('/reviews', { replace: true });
 
         }catch(err){
             console.error(err);
+            toast.error("Sign in failed!!!")
+
         }
     }
     const logOut = async()=>{
         try{
             await signOut (auth);
-            console.log("Logged out")
+            toast.success("Signed out successfully!!!")
+            // navigate('/', { replace: true });
         }catch(err){
             console.error(err);
+            toast.error("Sign out failed!!!")
         }
     }
 
     return (
         <>
+            <ToastContainer />
             <form>
                 <h1>Login</h1>
                 <label htmlFor="email">Email</label>
