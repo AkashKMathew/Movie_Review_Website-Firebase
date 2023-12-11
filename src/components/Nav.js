@@ -5,6 +5,7 @@ import { auth } from '../config/firebase.js';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from 'react';
+import './Nav.css'
 const Nav = () => {
   const currentUser = localStorage.getItem('user');
   useEffect(() => {
@@ -26,13 +27,12 @@ const Nav = () => {
         }
     }
   return (
-    <div>
+    <div className='nav-container'>
         <ToastContainer/>
         <div className="navbar">
-        <h1>Welcome to Movie Review Hub!</h1>
         {currentUser?
-        <Link><button className='login-btn' onClick={logOut}>LogOut</button></Link>:
-        <Link to="/login"><button className="login-btn">LogIn/SignUp</button></Link>}
+        <Link className='login-link'><button className='login-btn' onClick={logOut}>LogOut</button></Link>:
+        <Link to="/login" className='login-link'><button className="login-btn">LogIn/SignUp</button></Link>}
       </div>
     </div>
   )

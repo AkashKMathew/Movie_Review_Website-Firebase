@@ -7,38 +7,53 @@ body {
   }
   
   .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+    height: 100vh;
+    width: 100vw;
+    
+    background-image: url('../assets/bg1.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+   }
+   .container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.74);
+    z-index: 1; 
+  }
+  .contents {
+    position: relative;
+    z-index: 10;
+    color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 20vw;
   }
-  .navbar{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .login-btn{
-    position: fixed;
-    right:10px;
-  }
-
-  h1 {
-    color: #1a237e;
-  }
+.main-head{
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  height: 8%;
+  font-size: 2vw;
+}
   
-  section {
+  /* section {
     margin-bottom: 40px;
+  } */
+
+  h2{
+    font-size: 2vw;
   }
-  
-  h2 {
-    color: #1a237e;
-  }
-  
   p {
     line-height: 1.5;
+    font-size: 1.4vw;
   }
   
   ul {
@@ -51,8 +66,8 @@ body {
   }
   
   button {
-    background-color: #1a237e;
-    color: #fff;
+    background-color: #1d277e;
+    color: #c7c2c2;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;

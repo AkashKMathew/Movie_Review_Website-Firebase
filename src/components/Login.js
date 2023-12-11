@@ -49,18 +49,25 @@ const Login = () => {
 
     return (
         <>
+        <div className="form-div">
             <ToastContainer />
+            
             <form>
-                <h1>Login</h1>
+                <h1 className="login-head">Login</h1>
+                <div className="login-content">
                 <label htmlFor="email">Email</label>
-                <input type="text" id="email" name="email" required autoComplete="on"
+                <input type="text" id="email" name="email" required autoComplete="on" placeholder="abc@gmail.com"
                 onChange={(e)=> setEmail(e.target.value)}/>
+                </div>
+                <div className="login-content">
                 <label htmlFor="password">Password</label>
                 <input type="password" id="password" name="password" required autoComplete="on"
                 onChange={(e)=> setPassword(e.target.value)}/>
-                <button onClick={(e)=>signIn(e)}>SignIn</button>
+                </div>
+                <button onClick={(e)=>signIn(e)} className="siginIn-btn">Submit</button>
                 <button onClick={(e)=>signInWithGoolge(e)}>Sign In with google</button>
             </form>
+            </div>
         </>
     );
 }
