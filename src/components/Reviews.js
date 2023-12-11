@@ -58,7 +58,7 @@ const Reviews = ({ setAdd }) => {
             <div className="card">
               <img className="movie-img" src={movie.imageURL} alt="img"></img>
               <h1>{movie.name}</h1>
-              <p>Year: {movie.releaseDate}</p>
+              <p className="year">Year: {movie.releaseDate}</p>
               <div className="card-bottom">
               <button onClick={() => deleteMovie(movie.id, movie.imageURL)}>
                 Delete
