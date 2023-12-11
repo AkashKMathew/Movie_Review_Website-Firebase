@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import "./Reviews.css";
 
-const Reviews = ({ setAdd }) => {
+const Reviews = () => {
   const [movieList, setMovieList] = useState([]);
 
   const moviesCollectionRef = collection(db, "movies");
@@ -29,6 +29,7 @@ const Reviews = ({ setAdd }) => {
   useEffect(() => {
     getMovieList();
     // console.log(auth?.currentUser)
+    localStorage.setItem('add',0);
   }, []);
   const deleteMovie = async (id, prevImgURL) => {
     const movieDoc = doc(db, "movies", id);
@@ -46,13 +47,16 @@ const Reviews = ({ setAdd }) => {
     }
     getMovieList();
   };
+  const setAddValue = (value) =>{
+    localStorage.setItem('add',value);
+  }
 
   return (
     <div className="review-container">
       <ToastContainer />
         <div className="cards">
           <Link to="/add" className="add-btn">
-            <button onClick={() => setAdd(0)}>Add Review</button>
+            <button onClick={() => setAddValue(0)}>Add Review</button>
           </Link>
           {movieList.map((movie) => (
             <div className="card">
@@ -63,8 +67,8 @@ const Reviews = ({ setAdd }) => {
               <button onClick={() => deleteMovie(movie.id, movie.imageURL)}>
                 Delete
               </button>
-              <Link to={{ pathname: `/update/${movie.id}`, state: { movie } }}>
-                <button onClick={() => setAdd(1)}>Update</button>
+              <Link to={`/update/${movie.id}`} onClick={() => setAddValue(1)}>
+                <button >Update</button>
               </Link>
               </div>
             </div>

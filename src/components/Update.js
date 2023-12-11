@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db, auth, storage } from "../config/firebase.js";
 import {
   collection,
@@ -20,11 +20,21 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import "./Update.css";
 
-const Update = ({ add, setAdd }) => {
+const Update = () => {
   const { itemId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const movie = location.state?.movie || null;
+  const [add, setAdd] = useState(null);
+  useEffect(() => {
+    const addValue = localStorage.getItem('add');
+    console.log('Value from localStorage:', addValue);
+    setAdd(addValue);
+    console.log(add);
+  }, [])
+  
+  
+  
   // const [movieList, setMovieList] = useState([]);
 
   const [newMovieName, setNewMovieName] = useState("");
@@ -52,14 +62,15 @@ const Update = ({ add, setAdd }) => {
       });
       // console.log("hii")
       toast.success("New movie added!!!");
-      navigate("/reviews", { replace: true });
+      navigate(-1);
     } catch (err) {
       console.error(err);
       toast.error("Failed to add the movie!!!");
     }
     setFileUpload("");
   };
-  const updateMovie = async (id) => {
+  const updateMovie = async (id,e) => {
+    e.preventDefault();
     const data = await getDocs(moviesCollectionRef);
     const filteredData = data.docs.map((doc) => ({
       ...doc.data(),
@@ -86,8 +97,11 @@ const Update = ({ add, setAdd }) => {
         const oldImageRef = ref(storage, `${fileName}`);
         await deleteObject(oldImageRef);
       }
-      toast.success("Movie details updated!!!");
-      navigate("/reviews", { replace: true });
+      setTimeout(() => {
+        toast.success("Movie details updated!!!");
+      }, 1000);
+      
+      navigate(-1);
     } catch (e) {
       console.error(e);
       toast.error("Failed to update the movie details!!!");
@@ -96,7 +110,7 @@ const Update = ({ add, setAdd }) => {
   };
   return (
     <>
-      {add ? (
+      {add==='1' ? (
         <div className="form-div">
           <ToastContainer />
           <form className="update-form">
@@ -123,9 +137,7 @@ const Update = ({ add, setAdd }) => {
               </label>
             </div>
             <button
-              onClick={() => {
-                updateMovie(itemId);
-              }}>
+              onClick={(e) => updateMovie(itemId,e)}>
               Update
             </button>
           </form>

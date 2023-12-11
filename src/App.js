@@ -8,7 +8,6 @@ import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
 function App() {
-  const [add, setAdd] = useState(0)
 
   return (
     <div className="App">
@@ -16,9 +15,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />}/>
         <Route path="/login" element={<Login/>}/>
-        <Route path="/reviews" element={<><Nav/><Reviews setAdd={setAdd}/></>}/>
-        <Route path="/add" element={<Update add={add} setAdd={setAdd} />}/>
-        <Route path="/update/:itemId" element={<Update add={add} setAdd={setAdd} />}/>
+        <Route path="/reviews" element={<><Nav/><Reviews/></>}/>
+        <Route path="/add" element={<Update/>}/>
+        <Route path="/update/:itemId" element={<Update/>}/>
       </Routes>
     </div>
   );
