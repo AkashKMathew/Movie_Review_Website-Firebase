@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/FirebaseApp/static/css/main.b45d6cbd.css",
-    "main.js": "/FirebaseApp/static/js/main.f7c882d6.js",
-    "static/js/787.7f7dca02.chunk.js": "/FirebaseApp/static/js/787.7f7dca02.chunk.js",
+    "main.css": "/FirebaseApp/static/css/main.ad77c589.css",
+    "main.js": "/FirebaseApp/static/js/main.ac5050f5.js",
+    "static/js/787.907cea6f.chunk.js": "/FirebaseApp/static/js/787.907cea6f.chunk.js",
+    "static/media/bg1.jpg": "/FirebaseApp/static/media/bg1.3805a3a9bbb2aa6fb078.jpg",
     "index.html": "/FirebaseApp/index.html",
-    "main.b45d6cbd.css.map": "/FirebaseApp/static/css/main.b45d6cbd.css.map",
-    "main.f7c882d6.js.map": "/FirebaseApp/static/js/main.f7c882d6.js.map",
-    "787.7f7dca02.chunk.js.map": "/FirebaseApp/static/js/787.7f7dca02.chunk.js.map"
+    "main.ad77c589.css.map": "/FirebaseApp/static/css/main.ad77c589.css.map",
+    "main.ac5050f5.js.map": "/FirebaseApp/static/js/main.ac5050f5.js.map",
+    "787.907cea6f.chunk.js.map": "/FirebaseApp/static/js/787.907cea6f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b45d6cbd.css",
-    "static/js/main.f7c882d6.js"
+    "static/css/main.ad77c589.css",
+    "static/js/main.ac5050f5.js"
   ]
 }
