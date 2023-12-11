@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/FirebaseApp/static/css/main.ad77c589.css",
-    "main.js": "/FirebaseApp/static/js/main.ac5050f5.js",
-    "static/js/787.907cea6f.chunk.js": "/FirebaseApp/static/js/787.907cea6f.chunk.js",
-    "static/media/bg1.jpg": "/FirebaseApp/static/media/bg1.3805a3a9bbb2aa6fb078.jpg",
-    "index.html": "/FirebaseApp/index.html",
-    "main.ad77c589.css.map": "/FirebaseApp/static/css/main.ad77c589.css.map",
-    "main.ac5050f5.js.map": "/FirebaseApp/static/js/main.ac5050f5.js.map",
-    "787.907cea6f.chunk.js.map": "/FirebaseApp/static/js/787.907cea6f.chunk.js.map"
+    "main.css": "/Movie_Review_Website-Firebase/static/css/main.99a31d17.css",
+    "main.js": "/Movie_Review_Website-Firebase/static/js/main.73738767.js",
+    "static/js/787.907cea6f.chunk.js": "/Movie_Review_Website-Firebase/static/js/787.907cea6f.chunk.js",
+    "static/media/bg1.jpg": "/Movie_Review_Website-Firebase/static/media/bg1.3805a3a9bbb2aa6fb078.jpg",
+    "index.html": "/Movie_Review_Website-Firebase/index.html",
+    "main.99a31d17.css.map": "/Movie_Review_Website-Firebase/static/css/main.99a31d17.css.map",
+    "main.73738767.js.map": "/Movie_Review_Website-Firebase/static/js/main.73738767.js.map",
+    "787.907cea6f.chunk.js.map": "/Movie_Review_Website-Firebase/static/js/787.907cea6f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ad77c589.css",
-    "static/js/main.ac5050f5.js"
+    "static/css/main.99a31d17.css",
+    "static/js/main.73738767.js"
   ]
 }
