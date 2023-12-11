@@ -1,22 +1,28 @@
-import { React,useState } from "react";
+import { React,useState, useEffect } from "react";
 import { auth, googleProvider} from "../config/firebase.js";
-import { createUserWithEmailAndPassword, signInWithPopup,signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithPopup, onAuthStateChanged, getAuth } from "firebase/auth";
 import './Login.css'
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
-function Login() {
+const Login = () => {
     const navigate = useNavigate();
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
-    // console.log(auth?.currentUser?.email);
+
+    console.log(auth?.currentUser?.email);
     const signIn = async (e) =>{
         e.preventDefault();
         try{
             await createUserWithEmailAndPassword(auth, email, password);
-            toast.success("Signed in successfully!!!")
+            localStorage.setItem('user',auth?.currentUser || null);
+            setTimeout(() => {
+                toast.success("Signed in successfully!!!")
+            }, 1000);
+            
             navigate('/reviews', { replace: true });
+            
         }catch(err){
             console.error(err);
             toast.error("Sign in failed!!!")
@@ -27,7 +33,10 @@ function Login() {
         e.preventDefault();
         try{
             await signInWithPopup (auth, googleProvider);
-            toast.success("Signed in successfully!!!")
+            localStorage.setItem('user',auth?.currentUser || null);
+            setTimeout(() => {
+                toast.success("Signed in successfully!!!")
+            }, 1000);
             navigate('/reviews', { replace: true });
 
         }catch(err){
@@ -36,16 +45,7 @@ function Login() {
 
         }
     }
-    const logOut = async()=>{
-        try{
-            await signOut (auth);
-            toast.success("Signed out successfully!!!")
-            // navigate('/', { replace: true });
-        }catch(err){
-            console.error(err);
-            toast.error("Sign out failed!!!")
-        }
-    }
+    
 
     return (
         <>
@@ -60,7 +60,6 @@ function Login() {
                 onChange={(e)=> setPassword(e.target.value)}/>
                 <button onClick={(e)=>signIn(e)}>SignIn</button>
                 <button onClick={(e)=>signInWithGoolge(e)}>Sign In with google</button>
-                <button onClick={logOut} >SignOut</button>
             </form>
         </>
     );

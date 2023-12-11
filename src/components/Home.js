@@ -1,13 +1,10 @@
 import React from 'react'
 import "./Home.css"
-import { Link } from 'react-router-dom';
-function Home() {
+const Home = () => {
+  
   return (
     <div className="container">
-      <div className="navbar">
-        <h1>Welcome to Movie Review Hub!</h1>
-        <Link to="/login"><button className="login-btn">LogIn/SignUp</button></Link>
-      </div>
+      
       <p>
         Discover, review, and share your favorite movies with the community.
       </p>

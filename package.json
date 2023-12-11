@@ -1,6 +1,6 @@
 {
   "homepage": "https://AkashKMathew.github.io/FirebaseApp",
-  "name": "Movie Review",
+  "name": "movie_review",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
